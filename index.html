@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PDF Unlock & Extract</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: url("https://i.postimg.cc/bJCT90xd/tech-image-jpg.jpg") no-repeat center center/cover;
+      animation: bgmove 20s infinite alternate ease-in-out;
+    }
+    @keyframes bgmove {
+      0% { background-position: center; }
+      100% { background-position: right; }
+    }
+    .container {
+      background: rgba(0,0,0,0.75);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      color: white;
+      width: 600px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      animation: fadeIn 2s ease;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #00eaff;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-30px);} to { opacity: 1; transform: translateY(0);} }
+    @keyframes glow { from { text-shadow: 0 0 10px #00eaff;} to { text-shadow: 0 0 20px #00fff7, 0 0 30px #00f7ff;} }
+    .upload-box {
+      border: 2px dashed #00eaff;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      transition: 0.3s;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0% { box-shadow: 0 0 5px #00eaff;} 50% { box-shadow: 0 0 20px #00eaff;} 100% { box-shadow: 0 0 5px #00eaff;} }
+    input, .btn {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    .btn {
+      background: #00eaff; color: black; font-weight: bold;
+      padding: 12px 25px; border-radius: 30px; cursor: pointer;
+      font-size: 16px; transition: 0.3s;
+    }
+    .btn:hover { background: #00fff7; transform: scale(1.1);}
+    textarea {
+      width: 100%; height: 300px; padding: 10px;
+      border-radius: 8px; border: none; resize: none;
+      font-size: 14px; margin-top: 20px;
+      animation: slideUp 1s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0;} to { transform: translateY(0); opacity: 1;} }
+    .download-link {
+      display: inline-block; margin-top: 15px; background: #28a745;
+      color: white; padding: 10px 20px; border-radius: 25px;
+      text-decoration: none; font-weight: bold; transition: 0.3s;
+      animation: bounce 2s infinite;
+    }
+    .download-link:hover { background: #218838; transform: scale(1.1);}
+    @keyframes bounce { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-10px);} }
+    .error { color: red; font-weight: bold; margin-top: 10px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔓 PDF Unlock & Extract</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <div class="upload-box">
+        <input type="file" name="pdf" accept="application/pdf" required><br>
+        <input type="password" name="password" placeholder="Enter password if locked (optional)">
+      </div>
+      <button type="submit" class="btn">Extract Text</button>
+    </form>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if text %}
+      <h2>Extracted Text</h2>
+      <textarea readonly>{{ text }}</textarea>
+      {% if filename %}
+        <br>
+        <a href="{{ url_for('download_file', filename=filename) }}" class="download-link">⬇ Download Text</a>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
